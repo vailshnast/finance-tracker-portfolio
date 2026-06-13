@@ -19,7 +19,7 @@ public sealed class GetTransactionQueryHandler(
             $"transaction:{userId}:{query.Id}",
             async ct => await dbContext.Transactions
                 .Where(e => e.Id == query.Id && e.UserId == userId)
-                .Select(e => new TransactionDetailResponse(e.Id, e.Amount, e.Description, e.CategoryId, e.CreatedAt))
+                .Select(e => new TransactionDetailResponse(e.Id, e.Amount, e.Description, e.CategoryId, e.Date))
                 .FirstOrDefaultAsync(ct),
             tags: [$"transactions:{userId}"],
             cancellationToken: cancellationToken);

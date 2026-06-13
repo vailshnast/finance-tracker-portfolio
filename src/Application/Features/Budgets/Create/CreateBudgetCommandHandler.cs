@@ -15,6 +15,13 @@ public sealed class CreateBudgetCommandHandler(
 {
     public async Task<Result<CreateBudgetResponse>> HandleAsync(CreateBudgetCommand command, CancellationToken cancellationToken = default)
     {
+        var category = await dbContext.Categories
+            .FirstOrDefaultAsync(c => c.Id == command.CategoryId && c.UserId == currentUser.UserId, cancellationToken);
+
+        if (category is null)
+            return Result.Failure<CreateBudgetResponse>(
+                Error.NotFound("Category.NotFound", "Category not found."));
+
         var exists = await dbContext.Budgets.AnyAsync(
             b => b.UserId == currentUser.UserId
                  && b.CategoryId == command.CategoryId

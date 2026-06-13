@@ -1,4 +1,3 @@
-using System.Collections.Frozen;
 using FinanceTracker.Application.Abstractions.Data;
 using FinanceTracker.Application.Abstractions.Identity;
 using FinanceTracker.Application.Abstractions.Messaging;

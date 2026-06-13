@@ -16,6 +16,7 @@ public sealed class GetAllTransactionQueryHandler(
     public async Task<Result<PagedResult<TransactionDetailResponse>>> HandleAsync(GetAllTransactionQuery query, CancellationToken cancellationToken = default)
     {
         var userId = currentUser.UserId;
+        // Cache key only encodes pagination — adding filter params (date range, category) would require extending the key.
         var result = await cache.GetOrCreateAsync(
             $"transactions:all:{userId}:{query.Page}:{query.PageSize}",
             async ct =>
@@ -28,7 +29,7 @@ public sealed class GetAllTransactionQueryHandler(
                     .OrderByDescending(e => e.CreatedAt)
                     .Skip((query.Page - 1) * query.PageSize)
                     .Take(query.PageSize)
-                    .Select(e => new TransactionDetailResponse(e.Id, e.Amount, e.Description, e.CategoryId, e.CreatedAt))
+                    .Select(e => new TransactionDetailResponse(e.Id, e.Amount, e.Description, e.CategoryId, e.Date))
                     .ToListAsync(ct);
 
                 return new PagedResult<TransactionDetailResponse>(items, totalCount, query.Page, query.PageSize);

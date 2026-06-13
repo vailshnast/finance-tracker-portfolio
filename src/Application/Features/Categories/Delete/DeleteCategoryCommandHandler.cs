@@ -2,6 +2,7 @@ using FinanceTracker.Application.Abstractions.Data;
 using FinanceTracker.Application.Abstractions.Identity;
 using FinanceTracker.Application.Abstractions.Messaging;
 using FinanceTracker.Domain.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 
 namespace FinanceTracker.Application.Features.Categories.Delete;
@@ -17,6 +18,14 @@ public sealed class DeleteCategoryCommandHandler(
 
         if (entity is null || entity.UserId != currentUser.UserId)
             return Result.Failure(Error.NotFound("Category.NotFound", $"Category with ID '{command.Id}' was not found."));
+
+        var hasTransactions = await dbContext.Transactions
+            .AnyAsync(t => t.CategoryId == command.Id, cancellationToken);
+
+        if (hasTransactions)
+            return Result.Failure(Error.Conflict(
+                "Category.HasTransactions",
+                "Cannot delete a category that has transactions."));
 
         dbContext.Categories.Remove(entity);
 

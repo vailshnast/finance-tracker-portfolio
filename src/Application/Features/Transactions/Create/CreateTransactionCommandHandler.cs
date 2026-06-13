@@ -5,6 +5,7 @@ using Abstractions.Identity;
 using Abstractions.Messaging;
 using Domain.Common;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 
 public sealed class CreateTransactionCommandHandler(
@@ -14,6 +15,13 @@ public sealed class CreateTransactionCommandHandler(
 {
     public async Task<Result<CreateTransactionResponse>> HandleAsync(CreateTransactionCommand command, CancellationToken cancellationToken = default)
     {
+        var category = await dbContext.Categories
+            .FirstOrDefaultAsync(c => c.Id == command.CategoryId && c.UserId == currentUser.UserId, cancellationToken);
+
+        if (category is null)
+            return Result.Failure<CreateTransactionResponse>(
+                Error.NotFound("Category.NotFound", "Category not found."));
+
         var entity = new Transaction
         {
             Date = command.Date,

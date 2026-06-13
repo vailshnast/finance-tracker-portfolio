@@ -47,4 +47,36 @@ public sealed class DeleteCategoryCommandHandlerTests
         result.IsFailure.Should().BeTrue();
         result.Error!.Type.Should().Be(ErrorType.NotFound);
     }
+
+    [Fact]
+    public async Task HandleAsync_Should_Return_Conflict_When_Category_Has_Transactions()
+    {
+        // Arrange
+        var userId = "test-user-id";
+        await using var dbContext = TestDbContextFactory.Create();
+        var category = new Category { UserId = userId, Name = "Groceries" };
+        dbContext.Categories.Add(category);
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        dbContext.Transactions.Add(new Transaction
+        {
+            Date = new DateOnly(2026, 6, 1),
+            Amount = 50m,
+            CategoryId = category.Id,
+            UserId = userId
+        });
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        var currentUser = Substitute.For<ICurrentUser>();
+        currentUser.UserId.Returns(userId);
+        var handler = new DeleteCategoryCommandHandler(dbContext, currentUser, new PassthroughHybridCache());
+
+        // Act
+        var result = await handler.HandleAsync(new DeleteCategoryCommand(category.Id), TestContext.Current.CancellationToken);
+
+        // Assert
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Type.Should().Be(ErrorType.Conflict);
+        dbContext.Categories.Should().HaveCount(1);
+    }
 }

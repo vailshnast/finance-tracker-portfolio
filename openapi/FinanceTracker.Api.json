@@ -1613,7 +1613,7 @@
           "amount",
           "description",
           "categoryId",
-          "createdAt"
+          "date"
         ],
         "type": "object",
         "properties": {
@@ -1639,9 +1639,9 @@
             "type": "string",
             "format": "uuid"
           },
-          "createdAt": {
+          "date": {
             "type": "string",
-            "format": "date-time"
+            "format": "date"
           }
         }
       },
@@ -1779,6 +1779,6 @@
   ],
   "externalDocs": {
     "description": "GitHub Repository",
-    "url": "https://github.com/YOUR_USERNAME/YOUR_REPO"
+    "url": "https://github.com/vailshnast/finance-tracker-portfolio"
   }
 }
