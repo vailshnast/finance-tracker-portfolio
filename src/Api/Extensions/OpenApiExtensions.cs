@@ -28,7 +28,7 @@ public static class OpenApiExtensions
                 document.ExternalDocs = new Microsoft.OpenApi.OpenApiExternalDocs
                 {
                     Description = "GitHub Repository",
-                    Url = new Uri("https://github.com/YOUR_USERNAME/YOUR_REPO")
+                    Url = new Uri("https://github.com/vailshnast/finance-tracker-portfolio")
                 };
 
                 var components = document.Components ?? new Microsoft.OpenApi.OpenApiComponents();

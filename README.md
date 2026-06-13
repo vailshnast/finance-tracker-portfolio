@@ -4,6 +4,7 @@
 [![C#](https://img.shields.io/badge/C%23-13-239120?logo=csharp&logoColor=white)](https://learn.microsoft.com/en-us/dotnet/csharp/)
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![View API Docs](https://img.shields.io/badge/API%20Docs-OpenAPI-85EA2D?logo=swagger&logoColor=black)](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/vailshnast/finance-tracker-portfolio/main/openapi/FinanceTracker.Api.json)
 
 A finance tracking REST API built to go deep on ASP.NET Core architecture — Clean Architecture, CQRS, JWT auth, HybridCache, observability, integration tests. Started from [Mukesh Murugan's Clean Architecture template](https://codewithmukesh.com) as a foundation.
 
