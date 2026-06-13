@@ -15,11 +15,9 @@ A finance tracking REST API built to go deep on ASP.NET Core architecture — Cl
 - `Program.cs` split into focused extension methods — 70 lines, no noise
 - `Taskfile.yml` for all common commands without `cd` navigation
 
----
 ## Demo (Aspire + Scalar)
 ![Aspire + Scalar](.github/AspireScalar.gif)
 
----
 
 ## Tech Stack
 
@@ -40,7 +38,6 @@ A finance tracking REST API built to go deep on ASP.NET Core architecture — Cl
 | **Testing** | xUnit v3 + FluentAssertions + NSubstitute + NetArchTest |
 | **Solution** | `.slnx` format + Central Package Management |
 
----
 
 ## Architecture
 
@@ -68,7 +65,6 @@ A finance tracking REST API built to go deep on ASP.NET Core architecture — Cl
 
 **Dependency rule:** each layer depends only on the layer below it. Domain has zero external dependencies. Architecture tests enforce this at build time.
 
----
 
 ## Project Structure
 
@@ -91,7 +87,6 @@ A finance tracking REST API built to go deep on ASP.NET Core architecture — Cl
 └── Taskfile.yml             Task runner for all common commands
 ```
 
----
 
 ## Getting Started
 
@@ -135,7 +130,6 @@ On first run in Development the database is seeded automatically.
 - Email: `admin@gmail.com`
 - Password: `Admin123`
 
----
 
 ## Running Tests
 
@@ -147,7 +141,6 @@ dotnet test tests/Architecture.Tests                                            
 dotnet test src/FinanceTracker.slnx --filter "FullyQualifiedName~<TestName>"    # single test by name
 ```
 
----
 
 ## Task Automation
 
@@ -169,7 +162,6 @@ A [`Taskfile.yml`](Taskfile.yml) is included to automate common workflows via th
 | `task scaffold-all ENTITY=x ...` | Scaffold feature + endpoint + tests |
 | `task install-templates` | Install local `dotnet new` templates |
 
----
 
 ## Key Design Decisions
 
@@ -183,7 +175,6 @@ A [`Taskfile.yml`](Taskfile.yml) is included to automate common workflows via th
 | **Manual handler registration** over Scrutor | Zero extra dependencies — assembly reflection is ~40 lines. |
 | **`.slnx`** over `.sln` | XML-based, merge-friendly, the future of .NET solutions. |
 
----
 
 ## AI Development with CLAUDE.md
 
@@ -213,7 +204,6 @@ Every line in CLAUDE.md loads into every conversation and consumes context. The 
 - [CLAUDE.md Mastery for .NET](https://codewithmukesh.com/blog/claude-md-mastery-dotnet/)
 - [Using CLAUDE.md Files](https://claude.ai/blog/using-claude-md-files)
 
----
 
 ## About
 
