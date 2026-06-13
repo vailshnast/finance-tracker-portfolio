@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Domain\FinanceTracker.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Application\FinanceTracker.Application.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructure\FinanceTracker.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Api\FinanceTracker.Api.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="NetArchTest.Rules" />
+  </ItemGroup>
+</Project>

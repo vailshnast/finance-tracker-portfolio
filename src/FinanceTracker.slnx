@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="Api/FinanceTracker.Api.csproj" />
+    <Project Path="Application/FinanceTracker.Application.csproj" />
+    <Project Path="Domain/FinanceTracker.Domain.csproj" />
+    <Project Path="Infrastructure/FinanceTracker.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/aspire/">
+    <Project Path="AppHost/FinanceTracker.AppHost.csproj" />
+    <Project Path="ServiceDefaults/FinanceTracker.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="../tests/Application.UnitTests/FinanceTracker.Application.UnitTests.csproj" />
+    <Project Path="../tests/Architecture.Tests/FinanceTracker.Architecture.Tests.csproj" />
+    <Project Path="../tests/Api.IntegrationTests/FinanceTracker.Api.IntegrationTests.csproj" />
+  </Folder>
+</Solution>

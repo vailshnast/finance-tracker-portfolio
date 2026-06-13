@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "FinanceTracker",
+  "classifications": [ "Tests", "CQRS" ],
+  "identity": "FinanceTracker.Tests.Template",
+  "name": "FinanceTracker Tests",
+  "shortName": "financetest",
+  "sourceName": "FeatureTemplate",
+  "symbols": {
+    "entity": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "",
+      "description": "Entity class name (e.g. Category). Defaults to the feature name."
+    },
+    "entityResolved": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "entity",
+        "fallbackVariableName": "name"
+      },
+      "replaces": "EntityPlaceholder"
+    },
+    "dbSet": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "",
+      "description": "DbSet property name on IAppDbContext (e.g. Categories). Defaults to the entity name."
+    },
+    "dbSetResolved": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "dbSet",
+        "fallbackVariableName": "entityResolved"
+      },
+      "replaces": "DbSetPlaceholder",
+      "fileRename": "FolderTemplate"
+    }
+  }
+}

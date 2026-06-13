@@ -1,0 +1,142 @@
+version: '3'
+
+vars:
+  APPHOST: AppHost/FinanceTracker.AppHost.csproj
+  INFRA: Infrastructure/FinanceTracker.Infrastructure.csproj
+  API: Api/FinanceTracker.Api.csproj
+
+tasks:
+  start-docker-desktop:
+    desc: Start Docker Desktop (required by Aspire for Postgres/Redis containers)
+    cmds:
+      - cmd: powershell -Command 'Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"'
+        platforms: [windows]
+    ignore_error: true
+
+  start-docker-compose:
+    desc: Start services defined in docker-compose.yml
+    cmds:
+      - docker compose up -d
+
+  start-aspire:
+    desc: Run the Aspire AppHost (starts API, Postgres, Redis, dashboard)
+    dir: src
+    cmds:
+      - dotnet run --project {{.APPHOST}}
+
+  migrate:
+    desc: Apply EF Core migrations to the database
+    dir: src
+    cmds:
+      - dotnet ef database update --project {{.INFRA}} --startup-project {{.API}}
+
+  add-migration:
+    desc: "Scaffold a new EF Core migration (usage: task add-migration NAME=MyMigration)"
+    dir: src
+    requires:
+      vars: [NAME]
+    cmds:
+      - dotnet ef migrations add {{.NAME}} --project {{.INFRA}} --startup-project {{.API}}
+
+  remove-migration:
+    desc: Remove the last unapplied EF Core migration
+    dir: src
+    cmds:
+      - dotnet ef migrations remove --project {{.INFRA}} --startup-project {{.API}}
+
+  list-migrations:
+    desc: List all EF Core migrations and their applied status
+    dir: src
+    cmds:
+      - dotnet ef migrations list --project {{.INFRA}} --startup-project {{.API}}
+
+  run:
+    desc: Run the API project
+    dir: src
+    cmds:
+      - dotnet run --project {{.API}}
+
+  build:
+    desc: Build the entire solution
+    dir: src
+    cmds:
+      - dotnet build
+
+  restore:
+    desc: Restore NuGet packages
+    dir: src
+    cmds:
+      - dotnet restore
+
+  test:
+    desc: Run all tests
+    cmds:
+      - dotnet test src/FinanceTracker.slnx
+
+  test-unit:
+    desc: Run application unit tests only
+    cmds:
+      - dotnet test tests/Application.UnitTests
+
+  test-arch:
+    desc: Run architecture tests only
+    cmds:
+      - dotnet test tests/Architecture.Tests
+
+  test-filter:
+    desc: "Run a single test by name (usage: task test-filter NAME=MyTestName)"
+    requires:
+      vars: [NAME]
+    cmds:
+      - dotnet test src/FinanceTracker.slnx --filter "FullyQualifiedName~{{.NAME}}"
+
+  scaffold-feature:
+    desc: "Scaffold Application feature slice (handlers, validators, DTOs). Usage: task scaffold-feature ENTITY=Category DB_SET=Categories"
+    dir: src/Application/Features
+    requires:
+      vars: [ENTITY]
+    cmds:
+      - dotnet new financefeature -n {{.ENTITY}}{{if .DB_SET}} --entity {{.ENTITY}} --dbSet {{.DB_SET}}{{end}}
+
+  scaffold-endpoint:
+    desc: "Scaffold API endpoint group. Usage: task scaffold-endpoint ENTITY=Category DB_SET=Categories ROUTE=categories"
+    dir: src/Api/Endpoints
+    requires:
+      vars: [ENTITY]
+    cmds:
+      - dotnet new financeendpoint -n {{.ENTITY}}{{if .DB_SET}} --dbSet {{.DB_SET}}{{end}}{{if .ROUTE}} --route {{.ROUTE}}{{end}}
+
+  scaffold-tests:
+    desc: "Scaffold unit test suite for a feature. Usage: task scaffold-tests ENTITY=Category DB_SET=Categories"
+    dir: tests/Application.UnitTests/Features
+    requires:
+      vars: [ENTITY]
+    cmds:
+      - dotnet new financetest -n {{.ENTITY}}{{if .DB_SET}} --entity {{.ENTITY}} --dbSet {{.DB_SET}}{{end}}
+
+  scaffold-all:
+    desc: "Scaffold feature, endpoints, and tests in one go. Usage: task scaffold-all ENTITY=Category DB_SET=Categories ROUTE=categories"
+    requires:
+      vars: [ENTITY]
+    cmds:
+      - task: scaffold-feature
+        vars: { ENTITY: "{{.ENTITY}}", DB_SET: "{{.DB_SET}}" }
+      - task: scaffold-endpoint
+        vars: { ENTITY: "{{.ENTITY}}", DB_SET: "{{.DB_SET}}", ROUTE: "{{.ROUTE}}" }
+      - task: scaffold-tests
+        vars: { ENTITY: "{{.ENTITY}}", DB_SET: "{{.DB_SET}}" }
+
+  clean:
+    desc: Delete all bin and obj directories across the solution
+    cmds:
+      - cmd: powershell -Command "Get-ChildItem -Path . -Include bin,obj -Recurse -Directory | Remove-Item -Recurse -Force"
+        platforms: [windows]
+      - cmd: find . -type d \( -name bin -o -name obj \) -exec rm -rf {} +
+        platforms: [linux, darwin]
+
+  install-templates:
+    desc: Install (or re-install) the local dotnet new templates
+    cmds:
+      - dotnet new install templates/feature/ --force
+      - dotnet new install templates/endpoint/ --force
+      - dotnet new install templates/tests/ --force

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "FinanceTracker",
+  "classifications": [ "API", "Endpoints" ],
+  "identity": "FinanceTracker.Endpoint.Template",
+  "name": "FinanceTracker Endpoints",
+  "shortName": "financeendpoint",
+  "sourceName": "FeatureTemplate",
+  "symbols": {
+    "dbSet": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "",
+      "description": "DbSet/folder name matching the Application features namespace (e.g. Budgets). Defaults to the feature name."
+    },
+    "dbSetResolved": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "dbSet",
+        "fallbackVariableName": "name"
+      },
+      "replaces": "DbSetPlaceholder"
+    },
+    "route": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "",
+      "description": "API route segment (e.g. categories). Defaults to lowercase feature name."
+    },
+    "nameLowerCase": {
+      "type": "generated",
+      "generator": "casing",
+      "parameters": {
+        "source": "name",
+        "toLower": true
+      }
+    },
+    "routeResolved": {
+      "type": "generated",
+      "generator": "coalesce",
+      "parameters": {
+        "sourceVariableName": "route",
+        "fallbackVariableName": "nameLowerCase"
+      },
+      "replaces": "featuretemplates"
+    }
+  }
+}

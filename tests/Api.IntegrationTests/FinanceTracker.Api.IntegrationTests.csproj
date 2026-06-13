@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- AppHost reference generates Projects.FinanceTracker_AppHost for DistributedApplicationTestingBuilder -->
+    <ProjectReference Include="..\..\src\AppHost\FinanceTracker.AppHost.csproj" />
+    <!-- Infrastructure brings AppDbContext + EF Core for direct DB seeding -->
+    <ProjectReference Include="..\..\src\Infrastructure\FinanceTracker.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Aspire.Hosting.Testing" />
+  </ItemGroup>
+</Project>
